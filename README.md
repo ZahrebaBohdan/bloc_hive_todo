@@ -1,16 +1,5 @@
 # bloc_hive_todo
 
-A new Flutter project.
+https://user-images.githubusercontent.com/49997734/204146486-0422d7c0-2d9a-4d8c-98f0-eb84e9dfdd83.mp4
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
