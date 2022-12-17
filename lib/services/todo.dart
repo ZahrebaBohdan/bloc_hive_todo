@@ -30,10 +30,14 @@ class TodoService {
     await taskToDelete.delete();
   }
 
-  Future<void> updateTask(final String task, final String username) async {
+  Future<void> updateTask(final String task, final String? newtask,
+      final bool? checked, final String username) async {
     final taskToEdit = _tasks.values.firstWhere(
         (element) => element.task == task && element.user == username);
     final index = taskToEdit.key as int;
-    await _tasks.put(index, Task(username, task, !taskToEdit.completed));
+    await _tasks.put(
+        index,
+        Task(username, newtask ?? task,
+            checked == null ? taskToEdit.completed : !taskToEdit.completed));
   }
 }

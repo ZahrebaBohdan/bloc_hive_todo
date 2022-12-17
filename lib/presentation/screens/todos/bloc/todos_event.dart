@@ -33,11 +33,13 @@ class DeleteTodoEvent extends TodosEvent {
   List<Object> get props => [todoTask];
 }
 
-class ToggleTodoEvent extends TodosEvent {
-  final String todoTask;
+class UpdateTodoEvent extends TodosEvent {
+  final String task;
+  final String? newTask;
 
-  const ToggleTodoEvent(this.todoTask);
+  final bool? checked;
 
+  const UpdateTodoEvent(this.task, this.newTask, this.checked);
   @override
-  List<Object> get props => [todoTask];
+  List<Object> get props => [task];
 }
