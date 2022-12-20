@@ -13,110 +13,109 @@ class TodosPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus(),
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          title: const Text('Tasks'),
-          centerTitle: true,
-        ),
-        body: BlocProvider(
-          create: (context) =>
-              TodosBloc(RepositoryProvider.of<TodoService>(context))
-                ..add(LoadTodosEvent(username)),
-          child: BlocBuilder<TodosBloc, TodosState>(
-            builder: (context, state) {
-              if (state is TodosLoadedState) {
-                return ListView(
-                  children: [
-                    ...state.tasks.map(
-                      (e) => Padding(
-                        padding: const EdgeInsets.all(5),
-                        child: Slidable(
-                          endActionPane: ActionPane(
-                              extentRatio: 0.3,
-                              motion: const StretchMotion(),
-                              children: [
-                                SlidableAction(
-                                  flex: 3,
-                                  onPressed: (context) {
-                                    BlocProvider.of<TodosBloc>(context)
-                                        .add(DeleteTodoEvent(e.task));
-                                  },
-                                  icon: Icons.delete,
-                                  backgroundColor: Colors.red,
-                                  borderRadius: BorderRadius.circular(12),
-                                )
-                              ]),
-                          child: Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                color: Colors.amber[200]),
-                            child: ListTile(
-                              title: TextFormField(
-                                onChanged: (value) {
-                                  BlocProvider.of<TodosBloc>(context).add(
-                                      UpdateTodoEvent(e.task, value, null));
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: const Text('Tasks'),
+        centerTitle: true,
+      ),
+      body: BlocProvider(
+        create: (context) =>
+            TodosBloc(RepositoryProvider.of<TodoService>(context))
+              ..add(LoadTodosEvent(username)),
+        child: BlocBuilder<TodosBloc, TodosState>(
+          builder: (context, state) {
+            if (state is TodosLoadedState) {
+              return ListView(
+                children: [
+                  ...state.tasks.map(
+                    (e) => Padding(
+                      padding: const EdgeInsets.all(5),
+                      child: Slidable(
+                        endActionPane: ActionPane(
+                            extentRatio: 0.3,
+                            motion: const StretchMotion(),
+                            children: [
+                              SlidableAction(
+                                flex: 3,
+                                onPressed: (context) {
+                                  BlocProvider.of<TodosBloc>(context)
+                                      .add(DeleteTodoEvent(e.task));
                                 },
-                                initialValue: e.task,
-                                decoration: const InputDecoration(
-                                    border: InputBorder.none),
-                                style: TextStyle(
-                                    decorationThickness: 3,
-                                    decoration: e.completed
-                                        ? TextDecoration.lineThrough
-                                        : TextDecoration.none,
-                                    color: e.completed
-                                        ? Colors.black26
-                                        : Colors.black),
-                              ),
-                              // subtitle: e. ? Text(e.task) : null,
-                              trailing: Transform.scale(
-                                scale: 1.3,
-                                child: Checkbox(
-                                  shape: const CircleBorder(),
-                                  activeColor: Colors.amber,
-                                  value: e.completed,
-                                  onChanged: (value) {
-                                    BlocProvider.of<TodosBloc>(context).add(
-                                        UpdateTodoEvent(e.task, null, true));
-                                  },
-                                ),
+                                icon: Icons.delete,
+                                backgroundColor: Colors.red,
+                                borderRadius: BorderRadius.circular(12),
+                              )
+                            ]),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              color: Colors.amber[200]),
+                          child: ListTile(
+                            title: TextFormField(
+                              textInputAction: TextInputAction.done,
+                              maxLines: null,
+                              onChanged: (value) {
+                                BlocProvider.of<TodosBloc>(context)
+                                    .add(UpdateTodoEvent(e.task, value, null));
+                              },
+                              initialValue: e.task,
+                              decoration: const InputDecoration(
+                                  border: InputBorder.none),
+                              style: TextStyle(
+                                  decorationThickness: 3,
+                                  decoration: e.completed
+                                      ? TextDecoration.lineThrough
+                                      : TextDecoration.none,
+                                  color: e.completed
+                                      ? Colors.black26
+                                      : Colors.black),
+                            ),
+                            // subtitle: e. ? Text(e.task) : null,
+                            trailing: Transform.scale(
+                              scale: 1.3,
+                              child: Checkbox(
+                                shape: const CircleBorder(),
+                                activeColor: Colors.amber,
+                                value: e.completed,
+                                onChanged: (value) {
+                                  BlocProvider.of<TodosBloc>(context)
+                                      .add(UpdateTodoEvent(e.task, null, true));
+                                },
                               ),
                             ),
                           ),
                         ),
                       ),
                     ),
-                    ListTile(
-                      title: const Text('+ New task'),
-                      onTap: () async {
-                        final result = await showModalBottomSheet<String>(
-                          isScrollControlled: true,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(30),
-                            ),
+                  ),
+                  ListTile(
+                    title: const Text('+ New task'),
+                    onTap: () async {
+                      final result = await showModalBottomSheet<String>(
+                        isScrollControlled: true,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(30),
                           ),
-                          context: context,
-                          builder: (BuildContext context) {
-                            return const AddNewTask();
-                          },
-                        );
+                        ),
+                        context: context,
+                        builder: (BuildContext context) {
+                          return const AddNewTask();
+                        },
+                      );
 
-                        if (result != null) {
-                          BlocProvider.of<TodosBloc>(context)
-                              .add(AddTodoEvent(result));
-                        }
-                      },
-                    ),
-                  ],
-                );
-              }
-              return Container();
-            },
-          ),
+                      if (result != null) {
+                        BlocProvider.of<TodosBloc>(context)
+                            .add(AddTodoEvent(result));
+                      }
+                    },
+                  ),
+                ],
+              );
+            }
+            return Container();
+          },
         ),
       ),
     );
